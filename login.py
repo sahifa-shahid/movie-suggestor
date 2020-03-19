@@ -27,5 +27,26 @@ def signUp():
     else:
         return jsonify({"message": "missing fields"}), 400
 
+@app.route('/login', methods = ['POST'])
+def login():
+    info = request.get_json()
+    if 'username' in info and 'password' in info:
+        user = info['username']
+        pwd = info['password']
+        if collection.find_one({"username": user}) != None:
+            document = collection.find_one({"username": user})
+            if document['password'] == pwd: 
+                document['_id'] = str(document['_id'])
+                return json.dumps(document) #might wanna just return movie list
+            else: 
+                return jsonify({"message": "incorrect pass"}), 400
+        else: 
+            return jsonify({"message": "username specified does not exist"}), 400
+    else: 
+        return jsonify({"message": "missing fields"}), 400
+
+#@app.route('/preferences', methods = ['GET', 'POST'])
+#def preferences():
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
