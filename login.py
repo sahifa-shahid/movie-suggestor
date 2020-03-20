@@ -45,8 +45,25 @@ def login():
     else: 
         return jsonify({"message": "missing fields"}), 400
 
-#@app.route('/preferences', methods = ['GET', 'POST'])
-#def preferences():
+@app.route('/favourites', methods = ['POST', 'GET'])
+def favourites():
+    if request.method == 'POST':
+        favList = request.get_json()
+        collection.update_one({
+                "username": favList['username']
+            },
+            {
+                "$set": {
+                    "favourites": favList['favourites']
+                }
+            })
+        return jsonify({"message": "successfully updated"}), 201
+    elif request.method == 'GET':
+        user = request.get_json()
+        document = collection.find_one({"username": user['username']})
+        return jsonify({"favourites": document['favourites']}), 201
+    else: 
+        return jsonify({"message": "wrong request type"}), 201
 
 if __name__ == '__main__':
     app.run(debug=True)
