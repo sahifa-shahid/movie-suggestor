@@ -1,30 +1,30 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import { useFonts } from '@use-expo/font';
+import { AppLoading } from 'expo';
 import { LinearGradient } from 'expo-linear-gradient';
-import logo from './assets/logo.svg'
+
+import LandingPage from './landingPage'
 
 export default function App() {
-  return (
-    <LinearGradient colors={["rgba(0,0,0,0.95)", "#4e4e4e", "rgba(0,0,0,0.95)"]} style={styles.background}>
-        <Image source={logo} style={styles.logo} resizeMode="contain"/>
-        <Text style={{color: 'white', fontFamily: 'Raleway-Regular', fontSize: '72px'}}>SCOUT</Text>
-    </LinearGradient>
-  );
+  let [fontsLoaded] = useFonts({
+    'ReemKufi-Regular': require('./assets/fonts/ReemKufi-Regular.ttf'),
+    'Raleway-Regular': require('./assets/fonts/Raleway-Regular.ttf')
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
+        <LandingPage />
+      </LinearGradient>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   background: {
     height: '100vh',
-    backgroundColor: 'white',
-  },
-  
-  logo: {
-    width: "13%", 
-    flex: 1, 
-    marginLeft: '10%',
-  },
-  
-  appTitle: {
-    font: "R"
-  },
-});
+  }
+})
