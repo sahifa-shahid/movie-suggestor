@@ -1,15 +1,14 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native';
-import logo from './assets/logo.svg'
+import logo from './assets/logo.png'
 
 export default function LandingPage() {
     return (
-        <View style={{ display: 'flex', flexDirection: 'row', margin: 'auto', alignItems: 'center' }}>
+        <View style={styles.container}>
             <Image source={logo} style={styles.logo} />
             <Text style={styles.appTitle}>SCOUT</Text>
         </View>
     )
-
 }
 
 const styles = StyleSheet.create({
@@ -19,9 +18,17 @@ const styles = StyleSheet.create({
     },
 
     logo: {
-        width: '50px',
-        height: '77.04px',
-        marginRight: '11px',
+        width: 50,
+        height: 77.04,
+        marginRight: 11,
+    },
+
+    container: {
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     appTitle: {
