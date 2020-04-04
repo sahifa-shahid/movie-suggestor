@@ -2,9 +2,9 @@ import React from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import logo from './assets/logo.png'
 
-export default function SecondPage() {
+export default function SecondLandingPage() {
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <View style={styles.container}>
                 <Image source={logo} style={styles.logo} />
                 <Text style={styles.appTitle}>SCOUT</Text>
@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
     },
 
     container: {
-        marginTop: '40%',
+        flex: 1,
+        marginTop: 50,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -47,6 +48,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 22,
         textAlign: 'center',
+        flex: 2
     },
 
     buttonTitle: {
@@ -60,7 +62,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#DD1515',
         padding: 12,
         alignItems: 'center',
-        marginBottom: '8%',
     },
 
     button: {
@@ -69,11 +70,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 12,
         alignItems: 'center',
+        marginTop: 30
     },
 
     buttonContainer: {
-        marginRight: '8%',
+        flex: 2,
         marginLeft: '8%',
-        marginTop: '50%',
+        marginRight: '8%'
     },
 });

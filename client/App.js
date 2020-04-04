@@ -4,7 +4,7 @@ import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import SecondPage from './secondLandingPage'
+import SecondLandingPage from './secondLandingPage'
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -14,11 +14,11 @@ export default function App() {
 
   if (!fontsLoaded) {
     return <AppLoading />;
-  } 
+  }
   else {
     return (
       <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
-        <SecondPage />
+        <SecondLandingPage />
       </LinearGradient>
     );
   }
@@ -26,6 +26,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   background: {
-    height: '100%',
+    flex: 1,
   }
 })
