@@ -3,6 +3,7 @@ import { SafeAreaView, View, FlatList, StyleSheet, Text, Image, TouchableOpacity
 import Constants from 'expo-constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
+import MovieModal from './movieModal';
 
 import logo from './assets/logo.png'
 import frozen from './assets/frozen.png'
@@ -38,18 +39,19 @@ const DATA = [
     },
 ];
 
-function Item() {
+function Item({setModalVisible}) {
     return (
-        <View style={styles.item}>
+        <TouchableOpacity style={styles.item} onPress={() => setModalVisible(true)}>
             <Image source={frozen} />
-        </View>
+        </TouchableOpacity>
     );
 }
 
-function headerComponent() {
+function headerComponent({modalVisible, setModalVisible}) {
     const [selectedValue, setSelectedValue] = useState("All");
     return (
         <View style={styles.background}>
+            <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
             <View style={styles.titleContainer}>
                 <Image source={logo} style={styles.logo}></Image>
                 <Text style={styles.pageTitle}>GENERATED MOVIES</Text>
@@ -83,13 +85,14 @@ function headerComponent() {
 }
 
 function MovieScrollView() {
+    const [modalVisible, setModalVisible] = useState(false);
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
                 data={DATA}
-                renderItem={({ item }) => <Item />}
+                renderItem={({ item }) => <Item setModalVisible={setModalVisible}/>}
                 keyExtractor={item => item.id}
-                ListHeaderComponent={headerComponent()}
+                ListHeaderComponent={headerComponent({modalVisible, setModalVisible})}
                 ListHeaderComponentStyle={{ marginTop: 25, marginBottom: 8 }}
                 numColumns={3}
                 columnWrapperStyle={{ flex: 1, justifyContent: "space-evenly" }}

@@ -10,14 +10,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import RecentlyWatched from './recentlyWatched'
 import GenerateScreen from './generateScreen'
-import MovieModal from './movieModal';
 
 function ActivityScreen() {
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text>Home!</Text>
-                <MovieModal/>
             </View>
         </LinearGradient>
     );
