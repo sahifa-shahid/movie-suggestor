@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import MovieModal from './movieModal';
+import { BlurView } from 'expo-blur';
 
 import logo from './assets/logo.png'
 import frozen from './assets/frozen.png'
@@ -39,7 +40,7 @@ const DATA = [
     },
 ];
 
-function Item({setModalVisible}) {
+function Item({ setModalVisible }) {
     return (
         <TouchableOpacity style={styles.item} onPress={() => setModalVisible(true)}>
             <Image source={frozen} />
@@ -47,11 +48,10 @@ function Item({setModalVisible}) {
     );
 }
 
-function headerComponent({modalVisible, setModalVisible}) {
+function headerComponent() {
     const [selectedValue, setSelectedValue] = useState("All");
     return (
         <View style={styles.background}>
-            <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
             <View style={styles.titleContainer}>
                 <Image source={logo} style={styles.logo}></Image>
                 <Text style={styles.pageTitle}>GENERATED MOVIES</Text>
@@ -60,7 +60,7 @@ function headerComponent({modalVisible, setModalVisible}) {
                 <TouchableOpacity style={selectedValue === 'All' ? styles.buttonActive : styles.button} onPress={() => setSelectedValue("All")}>
                     <Text style={selectedValue === 'All' ? styles.buttonTitleActive : styles.buttonTitle}>All</Text>
                 </TouchableOpacity>
-                
+
                 <TouchableOpacity style={selectedValue === 'Horror' ? styles.buttonActive : styles.button} onPress={() => setSelectedValue("Horror")}>
                     <Text style={selectedValue === 'Horror' ? styles.buttonTitleActive : styles.buttonTitle}>Horror</Text>
                 </TouchableOpacity>
@@ -74,7 +74,7 @@ function headerComponent({modalVisible, setModalVisible}) {
                     <Text style={selectedValue === 'Comedy' ? styles.buttonTitleActive : styles.buttonTitle}>Comedy</Text>
                 </TouchableOpacity>
             </View>
-            
+
             <View style={styles.subtitleContainer}>
                 <View style={styles.leftBar}></View>
                 <Text style={styles.subtitle}>Top Picks</Text>
@@ -84,15 +84,14 @@ function headerComponent({modalVisible, setModalVisible}) {
     )
 }
 
-function MovieScrollView() {
-    const [modalVisible, setModalVisible] = useState(false);
+function MovieScrollView({ modalVisible, setModalVisible }) {
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
                 data={DATA}
-                renderItem={({ item }) => <Item setModalVisible={setModalVisible}/>}
+                renderItem={({ item }) => <Item setModalVisible={setModalVisible} />}
                 keyExtractor={item => item.id}
-                ListHeaderComponent={headerComponent({modalVisible, setModalVisible})}
+                ListHeaderComponent={headerComponent()}
                 ListHeaderComponentStyle={{ marginTop: 25, marginBottom: 8 }}
                 numColumns={3}
                 columnWrapperStyle={{ flex: 1, justifyContent: "space-evenly" }}
@@ -102,12 +101,14 @@ function MovieScrollView() {
 }
 
 export default function GenerateScreen() {
+    const [modalVisible, setModalVisible] = useState(false);
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
+            <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
             <View style={styles.background}>
-                {MovieScrollView()}
+                {MovieScrollView({ modalVisible, setModalVisible })}
             </View>
-        </LinearGradient>
+        </LinearGradient >
     )
 }
 
@@ -199,6 +200,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Raleway-Regular',
         color: 'black',
         fontSize: 14,
-    }
+    },
+
+    notBlurred: {
+        ...StyleSheet.absoluteFill,
+        top: Constants.statusBarHeight,
+    },
 
 });
