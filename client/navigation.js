@@ -1,6 +1,6 @@
 // You can import Ionicons from @expo/vector-icons if you use Expo or
 // react-native-vector-icons/Ionicons otherwise.
-import * as React from 'react';
+import React, {useState} from 'react';
 import { Text, View, StyleSheet, Button, KeyboardAvoidingView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import RecentlyWatched from './recentlyWatched'
 import GenerateScreen from './generateScreen'
+import RatingModal from './ratingModal'
 
 function ActivityScreen() {
     return (
@@ -21,13 +22,15 @@ function ActivityScreen() {
     );
 }
 
-function SettingsScreen({navigation}) {
+function SettingsScreen() {
+    const [modalVisible, setModalVisible] = useState(false)
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Settings!</Text>
+            <RatingModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
             <Button
             title="Go to Details"
-            onPress={() => navigation.navigate('Messages')}/>
+            onPress={() => setModalVisible(true)}/>
         </View>
     );
 }

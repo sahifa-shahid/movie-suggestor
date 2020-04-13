@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Text, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, Image, FlatList, Keyboard, View, SafeAreaView } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 import { MaterialIcons } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+
+import RatingModal from './ratingModal'
 import batman from './assets/batman.png'
 
 const DATA = [
@@ -25,21 +25,25 @@ const DATA = [
         title: 'Third Item',
     }]
 
-function Item() {
+function Item({ setModalVisible }) {
     return (
         <View style={styles.item}>
-            <Image source={batman} />
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+                <Image source={batman} />
+            </TouchableOpacity>
         </View>
     );
 }
 
 export default function MovieScrollView({ navigation }) {
+    const [modalVisible, setModalVisible] = useState(false)
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
+            <RatingModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
             <SafeAreaView style={styles.container}>
                 <FlatList
                     data={DATA}
-                    renderItem={({ item }) => <Item />}
+                    renderItem={({ item }) => <Item setModalVisible={setModalVisible} />}
                     keyExtractor={item => item.id}
                     ListHeaderComponent={SearchScreen({ navigation })}
                     ListHeaderComponentStyle={{ marginBottom: 8 }}
@@ -59,9 +63,9 @@ function SearchScreen({ navigation }) {
             </TouchableOpacity>
             <View style={styles.button}>
                 <TextInput placeholder="Type in a movie!"
-                    placeholderTextColor = "grey"
+                    placeholderTextColor="grey"
                     style={styles.buttonTitle}
-                    keyboardAppearance = "dark" />
+                    keyboardAppearance="dark" />
                 <TouchableOpacity>
                     <MaterialIcons name='search' color='white' size={25} style={{ marginRight: 10, flex: 1 }}></MaterialIcons>
                 </TouchableOpacity>

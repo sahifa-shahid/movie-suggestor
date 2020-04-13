@@ -38,12 +38,6 @@ export default function MovieModal({ modalVisible, setModalVisible }) {
                     </View>
                 </BlurView>
             </Modal>
-            {/* <TouchableHighlight
-                onPress={() => {
-                    setModalVisible(true);
-                }}>
-                <Text>Show Modal</Text>
-            </TouchableHighlight> */}
         </View>
     );
 }
@@ -120,6 +114,5 @@ const styles = StyleSheet.create({
     },
     notBlurred: {
         ...StyleSheet.absoluteFill,
-        top: Constants.statusBarHeight,
     },
 })

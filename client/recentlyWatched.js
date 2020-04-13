@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
@@ -6,6 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import SearchScreen from './searchScreen'
+import MovieModal from './movieModal'
 
 import logo from './assets/logo.png'
 import frozen from './assets/frozen.png'
@@ -69,15 +70,17 @@ const DATA = [
   },
 ];
 
-function Item() {
+function Item({setModalVisible}) {
   return (
     <View style={styles.item}>
-      <Image source={frozen} />
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <Image source={frozen} />
+      </TouchableOpacity>
     </View>
   );
 }
 
-function headerComponent({navigation}) {
+function headerComponent({ navigation }) {
   return (
     <View style={styles.background}>
       <View style={styles.titleContainer}>
@@ -99,14 +102,14 @@ function headerComponent({navigation}) {
   )
 }
 
-function MovieScrollView({navigation}) {
+function MovieScrollView({ navigation, setModalVisible }) {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={({ item }) => <Item />}
+        renderItem={({ item }) => <Item setModalVisible={setModalVisible} />}
         keyExtractor={item => item.id}
-        ListHeaderComponent={headerComponent({navigation})}
+        ListHeaderComponent={headerComponent({ navigation })}
         ListHeaderComponentStyle={{ marginTop: 25, marginBottom: 8 }}
         numColumns={3}
         columnWrapperStyle={{ flex: 1, justifyContent: "space-evenly" }}
@@ -118,20 +121,22 @@ function MovieScrollView({navigation}) {
 const Stack = createStackNavigator();
 export default function RecentScreen() {
   return (
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="RecentlyWatched" component={RecentlyWatched} />
-          <Stack.Screen name="Search" component={SearchScreen} />
-      </Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="RecentlyWatched" component={RecentlyWatched} />
+      <Stack.Screen name="Search" component={SearchScreen} />
+    </Stack.Navigator>
   );
 }
 
-function RecentlyWatched({navigation}) {
+function RecentlyWatched({ navigation }) {
+  const [modalVisible, setModalVisible] = useState(false)
   return (
-      <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
-          <View style={styles.background}>
-              {MovieScrollView({navigation})}
-          </View>
-      </LinearGradient>
+    <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
+      <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
+      <View style={styles.background}>
+        {MovieScrollView({ navigation, setModalVisible })}
+      </View>
+    </LinearGradient>
   )
 }
 
