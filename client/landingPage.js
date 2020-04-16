@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
         height: 77.04,
         marginRight: 11,
     },
-
     container: {
         marginTop: 'auto',
         marginBottom: 'auto',
@@ -25,7 +24,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-
     appTitle: {
         color: 'white',
         fontSize: 72,

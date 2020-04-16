@@ -4,12 +4,12 @@ import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import SignIn from './signIn'
+import SignUp from './signUp'
 import LandingPage from './landingPage';
 import FavMovies from './favMovies';
 
 import Navigation from './navigation'
-
-
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -21,7 +21,8 @@ export default function App() {
   });
   if (!fontsLoaded) {
     return <AppLoading />;
-  } else {
+  }
+  else {
     return (
       // <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
       //   <FavMovies />
