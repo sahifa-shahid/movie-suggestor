@@ -1,19 +1,38 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { useFonts } from '@use-expo/font';
+import { AppLoading } from 'expo';
+import { LinearGradient } from 'expo-linear-gradient';
+
+import LandingPage from './landingPage';
+import FavMovies from './favMovies';
+
+import Navigation from './navigation'
+
+
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+  let [fontsLoaded] = useFonts({
+    'ReemKufi-Regular': require('./assets/fonts/ReemKufi-Regular.ttf'),
+    'Raleway-Regular': require('./assets/fonts/Raleway-Regular.ttf'),
+    'Raleway-SemiBold': require('./assets/fonts/Raleway-SemiBold.ttf'),
+    'Raleway-Medium': require('./assets/fonts/Raleway-Medium.ttf'),
+    'Raleway-Bold': require('./assets/fonts/Raleway-Bold.ttf')
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      // <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
+      //   <FavMovies />
+      // </LinearGradient >
+      <Navigation/>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  background: {
+    flex: 1
   },
-});
+})
