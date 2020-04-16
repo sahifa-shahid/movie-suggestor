@@ -3,11 +3,12 @@ import { SafeAreaView, View, FlatList, StyleSheet, Text, Image, TouchableOpacity
 import Constants from 'expo-constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
-import MovieModal from './movieModal';
 import { BlurView } from 'expo-blur';
 
 import logo from './assets/logo.png'
 import frozen from './assets/frozen.png'
+import MovieModal from './movieModal';
+import AlertMeModal from './alertMeModal';
 
 const DATA = [
     {
@@ -60,7 +61,6 @@ function headerComponent() {
                 <TouchableOpacity style={selectedValue === 'All' ? styles.buttonActive : styles.button} onPress={() => setSelectedValue("All")}>
                     <Text style={selectedValue === 'All' ? styles.buttonTitleActive : styles.buttonTitle}>All</Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={selectedValue === 'Horror' ? styles.buttonActive : styles.button} onPress={() => setSelectedValue("Horror")}>
                     <Text style={selectedValue === 'Horror' ? styles.buttonTitleActive : styles.buttonTitle}>Horror</Text>
                 </TouchableOpacity>
@@ -100,11 +100,13 @@ function MovieScrollView({ modalVisible, setModalVisible }) {
     );
 }
 
-export default function GenerateScreen() {
+export default function GenerateScreen({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
+    const [alertVisible, setAlertVisible] = useState(true)
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
             <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
+            <AlertMeModal alertVisible={alertVisible} setAlertVisible={setAlertVisible} navigation = {navigation}/>
             <View style={styles.background}>
                 {MovieScrollView({ modalVisible, setModalVisible })}
             </View>

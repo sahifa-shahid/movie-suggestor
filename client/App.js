@@ -6,9 +6,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import LandingPage from './landingPage';
 import FavMovies from './favMovies';
-import AlertMe from './alertMe';
 
 import Navigation from './navigation'
+
+
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -18,15 +19,12 @@ export default function App() {
     'Raleway-Medium': require('./assets/fonts/Raleway-Medium.ttf'),
     'Raleway-Bold': require('./assets/fonts/Raleway-Bold.ttf')
   });
-
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
     return (
       // <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
-      //   {/* <FavMovies /> */}
-      //   <Navigation />
-
+      //   <FavMovies />
       // </LinearGradient >
       <Navigation/>
     );

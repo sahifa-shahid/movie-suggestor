@@ -58,7 +58,7 @@ export default function MovieScrollView({ navigation }) {
 function SearchScreen({ navigation }) {
     return (
         <View style={styles.background}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigation.navigate('RecentlyWatched')}>
                 <MaterialIcons name='arrow-back' color='white' size={35} style={{ marginTop: 15, marginLeft: 10, marginBottom: 40 }} />
             </TouchableOpacity>
             <View style={styles.button}>

@@ -6,35 +6,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { createStackNavigator } from '@react-navigation/stack';
 
 import RecentlyWatched from './recentlyWatched'
 import GenerateScreen from './generateScreen'
-import RatingModal from './ratingModal'
-
-function ActivityScreen() {
-    return (
-        <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Home!</Text>
-            </View>
-        </LinearGradient>
-    );
-}
-
-function SettingsScreen() {
-    const [modalVisible, setModalVisible] = useState(false)
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Settings!</Text>
-            <RatingModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
-            <Button
-            title="Go to Details"
-            onPress={() => setModalVisible(true)}/>
-        </View>
-    );
-}
-
+import ActivityScreen from './activityScreen'
+import SettingsScreen from './settingScreen'
 
 const Tab = createBottomTabNavigator();
 
