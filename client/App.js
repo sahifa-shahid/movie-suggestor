@@ -5,6 +5,7 @@ import { AppLoading } from 'expo';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import SignIn from './signIn'
+import SignUp from './signUp'
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -18,7 +19,7 @@ export default function App() {
   else {
     return (
       <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
-      <SignIn  />
+      <SignUp  />
       </LinearGradient>
     );
   }
@@ -27,9 +28,5 @@ export default function App() {
 const styles = StyleSheet.create({
   background: { 
     flex: 1,
-    // bottom: 0,
-    // position: 'relative',
-    // right: 0,
-    // left: 0
   },
 })

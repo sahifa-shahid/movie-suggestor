@@ -45,7 +45,9 @@ export default function SignUp() {
                                 }}
                                 secureTextEntry={true}
                             ></TextInput>
-                            <Image source={eye} style={{ marginRight: 17 }}></Image>
+                            <TouchableOpacity>
+                                <Image source={eye} style={{ marginRight: 17 }}></Image>
+                            </TouchableOpacity>
                         </View>
                         <View style={{ flex: 1, marginTop: 25 }}>
                             <TouchableOpacity style={styles.button}>
