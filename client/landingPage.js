@@ -12,17 +12,11 @@ export default function LandingPage() {
 }
 
 const styles = StyleSheet.create({
-    background: {
-        height: '100vh',
-        backgroundColor: 'white',
-    },
-
     logo: {
         width: 50,
         height: 77.04,
         marginRight: 11,
     },
-
     container: {
         marginTop: 'auto',
         marginBottom: 'auto',
@@ -30,7 +24,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-
     appTitle: {
         color: 'white',
         fontSize: 72,
