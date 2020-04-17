@@ -1,9 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import movieRect from './assets/movieRect.png'
+import {LinearGradient} from 'expo-linear-gradient'
 
-export default function FavMovies() {
+export default function FavMovies({navigation}) {
     return (
+        <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={{flex: 1}}>
         <View style={styles.mainContainer}>
             <Text style={styles.description}>Pick your favourite movies!</Text>
             <View style={styles.movieContainer}>
@@ -13,11 +15,12 @@ export default function FavMovies() {
                 <Image style={styles.movieImage} source={movieRect} resizeMode="contain" />
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.redButton}>
-                    <Text style={styles.buttonTitle}>Next</Text>
+                <TouchableOpacity style={styles.redButton} onPress={() => navigation.navigate('Navigation')}>
+                    <Text style={styles.buttonTitle} >Next</Text>
                 </TouchableOpacity>
             </View>
         </View>
+        </LinearGradient>
     )
 }
 

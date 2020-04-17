@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import logo from './assets/logo.png'
 
-export default function SettingsScreen() {
+export default function SettingsScreen({navigation}) {
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={{ flex: 1 }}>
             <View style={styles.titleContainer}>
@@ -12,7 +12,7 @@ export default function SettingsScreen() {
                 <Text style={styles.pageTitle}>ACCOUNT SETTINGS</Text>
             </View>
             <View style={{ flex: 1, justifyContent: 'center' }}>
-                <TouchableOpacity style={styles.redButton}>
+                <TouchableOpacity style={styles.redButton} onPress={() => navigation.navigate('LandingPage')}>
                     <Text style={styles.buttonTitle}>Log out</Text>
                 </TouchableOpacity>
             </View>

@@ -4,13 +4,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { MaterialIcons } from '@expo/vector-icons';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import AlertMeModal from './alertMeModal';
 
 import spiderman from './assets/spiderman.png'
 import trailer from './assets/trailer.png'
 import MovieModal from './movieModal'
 
 
-export default function ActivityScreen() {
+export default function ActivityScreen({navigation}) {
     const data = [
         {
             title: "SPIDERMAN: INTO THE SPIDER VERSE",
@@ -87,8 +88,10 @@ export default function ActivityScreen() {
     const SLIDER_WIDTH = Dimensions.get('window').width;
     const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.95);
     const [modalVisible, setModalVisible] = useState(false)
+    const [alertVisible, setAlertVisible] = useState(true)
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
+            <AlertMeModal alertVisible={alertVisible} setAlertVisible={setAlertVisible} navigation = {navigation}/>
             <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
             <SafeAreaView>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>

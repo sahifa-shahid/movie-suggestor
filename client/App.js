@@ -4,12 +4,13 @@ import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import SignIn from './signIn'
-import SignUp from './signUp'
 import LandingPage from './landingPage';
 import FavMovies from './favMovies';
-
 import Navigation from './navigation'
+
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+const Stack = createStackNavigator();
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -23,13 +24,16 @@ export default function App() {
     return <AppLoading />;
   }
   else {
-    return (
-      // <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
-      //   <FavMovies />
-      // </LinearGradient >
-      <Navigation/>
-    );
-  }
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="LandingPage" component={LandingPage} />
+        <Stack.Screen name="FavMovies" component={FavMovies} />
+        <Stack.Screen name="Navigation" component={Navigation} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 }
 
 const styles = StyleSheet.create({

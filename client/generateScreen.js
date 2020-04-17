@@ -8,7 +8,6 @@ import { BlurView } from 'expo-blur';
 import logo from './assets/logo.png'
 import frozen from './assets/frozen.png'
 import MovieModal from './movieModal';
-import AlertMeModal from './alertMeModal';
 
 const DATA = [
     {
@@ -102,11 +101,9 @@ function MovieScrollView({ modalVisible, setModalVisible }) {
 
 export default function GenerateScreen({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
-    const [alertVisible, setAlertVisible] = useState(true)
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
             <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
-            <AlertMeModal alertVisible={alertVisible} setAlertVisible={setAlertVisible} navigation = {navigation}/>
             <View style={styles.background}>
                 {MovieScrollView({ modalVisible, setModalVisible })}
             </View>
