@@ -46,7 +46,7 @@ export default function ActivityScreen({navigation}) {
                 marginRight: 10
             }}>
                 <ImageBackground source={spiderman} style={{ width: '100%', height: '100%' }}>
-                    <BlurView tint="dark" intensity={160} style={styles.notBlurred}>
+                    <BlurView tint="dark" intensity={50} style={styles.notBlurred}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={styles.rank} >{item.rank}</Text>
                             <TouchableOpacity onPress={() => setModalVisible(true)}>
