@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Dimensions, SafeAreaView } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -14,33 +14,35 @@ export default function SignUpModal({ modalVisibleSignUp, setModalVisibleSignUp,
                 Alert.alert('Modal has been closed.');
             }}>
             <BlurView tint="dark" intensity={modalVisibleSignUp ? 50 : 0} style={styles.notBlurred}>
-                <ScrollView scrollEnabled={false}>
-                    <TouchableOpacity onPress={() => { setModalVisibleSignUp(!modalVisibleSignUp); }}>
-                        <MaterialIcons name='arrow-back' color='white' size={40} style={{ padding: 10 }} />
-                    </TouchableOpacity>
-                    <View style={styles.mainContainer}>
-                        <View style={{ marginTop: 50 }}>
-                            <TextInput
-                                placeholder="Type in your username!"
-                                placeholderTextColor='#e5e5e5'
-                                style={styles.username}></TextInput>
-                        </View>
-                        <View style={styles.passwordContainer}>
-                            <TextInput
-                                placeholder="Type in your password!"
-                                placeholderTextColor='#e5e5e5'
-                                style={styles.password}
-                                secureTextEntry={visible}
-                            ></TextInput>
-                            <TouchableOpacity onPress={() => setVisible(!visible)}>
-                                <MaterialIcons name='remove-red-eye' color='black' size={22} style={styles.eye} />
+                <SafeAreaView>
+                    <ScrollView scrollEnabled={false}>
+                        <TouchableOpacity onPress={() => { setModalVisibleSignUp(!modalVisibleSignUp); }}>
+                            <MaterialIcons name='arrow-back' color='white' size={40} style={{ padding: 10 }} />
+                        </TouchableOpacity>
+                        <View style={styles.mainContainer}>
+                            <View style={{ marginTop: 50 }}>
+                                <TextInput
+                                    placeholder="Type in your username!"
+                                    placeholderTextColor='#e5e5e5'
+                                    style={styles.username}></TextInput>
+                            </View>
+                            <View style={styles.passwordContainer}>
+                                <TextInput
+                                    placeholder="Type in your password!"
+                                    placeholderTextColor='#e5e5e5'
+                                    style={styles.password}
+                                    secureTextEntry={visible}
+                                ></TextInput>
+                                <TouchableOpacity onPress={() => setVisible(!visible)}>
+                                    <MaterialIcons name='remove-red-eye' color='black' size={22} style={styles.eye} />
+                                </TouchableOpacity>
+                            </View>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.buttonTitle} onPress={() => { navigation.navigate('FavMovies'); setModalVisibleSignUp(false) }}>Sign Up</Text>
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.button}>
-                            <Text style={styles.buttonTitle} onPress={() => {navigation.navigate('FavMovies'); setModalVisibleSignUp(false)}}>Sign Up</Text>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                </SafeAreaView>
             </BlurView>
         </Modal>
     )

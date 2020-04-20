@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Text, View, Dimensions, SafeAreaView, StyleSheet, ImageBackground, Image, TouchableOpacity } from 'react-native';
+import { Text, View, Dimensions, SafeAreaView, StyleSheet, ImageBackground, Image, TouchableOpacity, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -11,7 +11,7 @@ import trailer from './assets/trailer.png'
 import MovieModal from './movieModal'
 
 
-export default function ActivityScreen({navigation}) {
+export default function ActivityScreen({ navigation }) {
     const data = [
         {
             title: "SPIDERMAN: INTO THE SPIDER VERSE",
@@ -46,7 +46,7 @@ export default function ActivityScreen({navigation}) {
                 marginRight: 10
             }}>
                 <ImageBackground source={spiderman} style={{ width: '100%', height: '100%' }}>
-                    <BlurView tint="dark" intensity={50} style={styles.notBlurred}>
+                    <BlurView tint="dark" intensity={Platform.OS === 'ios' ? 70 : 160} style={styles.notBlurred}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={styles.rank} >{item.rank}</Text>
                             <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -91,7 +91,7 @@ export default function ActivityScreen({navigation}) {
     const [alertVisible, setAlertVisible] = useState(true)
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
-            <AlertMeModal alertVisible={alertVisible} setAlertVisible={setAlertVisible} navigation = {navigation}/>
+            <AlertMeModal alertVisible={alertVisible} setAlertVisible={setAlertVisible} navigation={navigation} />
             <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
             <SafeAreaView>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -101,7 +101,7 @@ export default function ActivityScreen({navigation}) {
                         data={data}
                         sliderWidth={SLIDER_WIDTH}
                         itemWidth={ITEM_WIDTH}
-                        renderItem= {({item}) => renderItem({item, setModalVisible})}
+                        renderItem={({ item }) => renderItem({ item, setModalVisible })}
                         onSnapToItem={index => setActiveIndex(index)} />
                 </View>
                 <Pagination
