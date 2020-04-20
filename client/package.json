@@ -16,6 +16,7 @@
     "@use-expo/font": "^1.0.1",
     "expo": "^36.0.2",
     "expo-blur": "~8.0.0",
+    "firebase": "^7.14.1",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
