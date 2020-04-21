@@ -1,8 +1,32 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as firebase from "firebase"
+
+
 
 import logo from './assets/logo.png'
+
+function firebaseSignOut({navigation}) {
+    firebase.auth().signOut().then(function() {
+        navigation.navigate('LandingPage')
+    }).catch(function(error) {
+      // An error happened.
+    });
+  }
+// function addStuff () {
+//     db.collection("users").add({
+//         first: "Ada",
+//         last: "Lovelace",
+//         born: 1815
+//     })
+//     .then(function(docRef) {
+//         console.log("Document written with ID: ", docRef.id);
+//     })
+//     .catch(function(error) {
+//         console.error("Error adding document: ", error);
+//     });
+// }
 
 export default function SettingsScreen({navigation}) {
     return (
@@ -12,9 +36,12 @@ export default function SettingsScreen({navigation}) {
                 <Text style={styles.pageTitle}>ACCOUNT SETTINGS</Text>
             </View>
             <View style={{ flex: 1, justifyContent: 'center' }}>
-                <TouchableOpacity style={styles.redButton} onPress={() => navigation.navigate('LandingPage')}>
+                <TouchableOpacity style={styles.redButton} onPress={() => firebaseSignOut({navigation})}>
                     <Text style={styles.buttonTitle}>Log out</Text>
                 </TouchableOpacity>
+                {/* <TouchableOpacity style={styles.redButton} onPress={() => addStuff()}>
+                    <Text style={styles.buttonTitle}>Add Stuff</Text>
+                </TouchableOpacity> */}
             </View>
         </LinearGradient>
     );

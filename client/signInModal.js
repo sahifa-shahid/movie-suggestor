@@ -2,9 +2,24 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Dimensions, SafeAreaView } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { MaterialIcons } from '@expo/vector-icons';
+import * as firebase from 'firebase';
+
+function firebaseSignIn(email, password, {navigation}, setModalVisibleSignIn) {
+    firebase.auth().signInWithEmailAndPassword(email, password).then(function() {
+        navigation.navigate('Navigation')
+        setModalVisibleSignIn(false)
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // ...
+    });
+  }
 
 export default function SignInModal({ modalVisibleSignIn, setModalVisibleSignIn, navigation }) {
     const [visible, setVisible] = useState(true)
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     return (
         <Modal
             animationType="slide"
@@ -22,8 +37,10 @@ export default function SignInModal({ modalVisibleSignIn, setModalVisibleSignIn,
                         <View style={styles.mainContainer}>
                             <View style={{ marginTop: 50 }}>
                                 <TextInput
-                                    placeholder="Type in your username!"
+                                    placeholder="Type in your email!"
                                     placeholderTextColor='#e5e5e5'
+                                    value={email}
+                                    onChangeText={text => setEmail(text)}
                                     style={styles.username}></TextInput>
                             </View>
                             <View style={styles.passwordContainer}>
@@ -31,13 +48,15 @@ export default function SignInModal({ modalVisibleSignIn, setModalVisibleSignIn,
                                     placeholder="Type in your password!"
                                     placeholderTextColor='#e5e5e5'
                                     style={styles.password}
+                                    value={password}
+                                    onChangeText={text => setPassword(text)}
                                     secureTextEntry={visible}
                                 ></TextInput>
                                 <TouchableOpacity onPress={() => setVisible(!visible)}>
                                     <MaterialIcons name='remove-red-eye' color='white' size={22} style={styles.eye} />
                                 </TouchableOpacity>
                             </View>
-                            <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('Navigation'); setModalVisibleSignIn(false) }}>
+                            <TouchableOpacity style={styles.button} onPress={() => { firebaseSignIn(email, password, {navigation}, setModalVisibleSignIn)/*navigation.navigate('Navigation'); setModalVisibleSignIn(false)*/ }}>
                                 <Text style={styles.buttonTitle}>Sign In</Text>
                             </TouchableOpacity>
                         </View>

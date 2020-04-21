@@ -3,8 +3,24 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Modal,
 import { BlurView } from 'expo-blur';
 import { MaterialIcons } from '@expo/vector-icons';
 
+import * as firebase from 'firebase';
+
+function firebaseSignUp(email, password, {navigation}, setModalVisibleSignUp) {
+  firebase.auth().createUserWithEmailAndPassword(email, password).then(function(){
+    navigation.navigate('FavMovies')
+    setModalVisibleSignUp(false)
+  }).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ...
+  });
+}
+
 export default function SignUpModal({ modalVisibleSignUp, setModalVisibleSignUp, navigation }) {
     const [visible, setVisible] = useState(true)
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     return (
         <Modal
             animationType="slide"
@@ -22,9 +38,12 @@ export default function SignUpModal({ modalVisibleSignUp, setModalVisibleSignUp,
                         <View style={styles.mainContainer}>
                             <View style={{ marginTop: 50 }}>
                                 <TextInput
-                                    placeholder="Type in your username!"
+                                    placeholder="Type in your email!"
                                     placeholderTextColor='#e5e5e5'
-                                    style={styles.username}></TextInput>
+                                    style={styles.username}
+                                    value = {email}
+                                    onChangeText={text => setEmail(text)}
+                                    ></TextInput>
                             </View>
                             <View style={styles.passwordContainer}>
                                 <TextInput
@@ -32,13 +51,15 @@ export default function SignUpModal({ modalVisibleSignUp, setModalVisibleSignUp,
                                     placeholderTextColor='#e5e5e5'
                                     style={styles.password}
                                     secureTextEntry={visible}
+                                    value={password}
+                                    onChangeText={text => setPassword(text)}
                                 ></TextInput>
                                 <TouchableOpacity onPress={() => setVisible(!visible)}>
                                     <MaterialIcons name='remove-red-eye' color='black' size={22} style={styles.eye} />
                                 </TouchableOpacity>
                             </View>
                             <TouchableOpacity style={styles.button}>
-                                <Text style={styles.buttonTitle} onPress={() => { navigation.navigate('FavMovies'); setModalVisibleSignUp(false) }}>Sign Up</Text>
+                                <Text style={styles.buttonTitle} onPress={() => { firebaseSignUp(email, password, {navigation}, setModalVisibleSignUp) }}>Sign Up</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>
