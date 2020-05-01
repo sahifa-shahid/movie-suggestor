@@ -6,38 +6,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import LandingPage from './landingPage';
 import FavMovies from './favMovies';
-import Navigation from './navigation'
+import Navigation from './navigation';
+import SearchFavMovies from './searchFavMovies'
+import Testing from './test'
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import * as firebase from 'firebase';
+import {auth, db} from './firebaseHandler'
 
-// Optionally import the services that you want to use
-//import "firebase/auth";
-//import "firebase/database";
-//import "firebase/firestore";
-//import "firebase/functions";
-//import "firebase/storage";
-
-// Initialize Firebase
-
-const Stack = createStackNavigator();
-const firebaseConfig = {
-  apiKey: "AIzaSyAI5Dms1tTXc_vA5TTF6ZOwkom6lX_3GDs",
-    authDomain: "scout-2b10f.firebaseapp.com",
-    databaseURL: "https://scout-2b10f.firebaseio.com",
-    projectId: "scout-2b10f",
-    storageBucket: "scout-2b10f.appspot.com",
-    messagingSenderId: "62948149005",
-    appId: "1:62948149005:web:6d2b5aa5e34c4449771244",
-    measurementId: "G-V544T3KFJ1"
-
-};
-
-firebase.initializeApp(firebaseConfig);
-
-firebase.auth().onAuthStateChanged((user) => {
+auth.onAuthStateChanged((user) => {
   if (user != null) {
     console.log("Logged In")
   } else {
@@ -45,26 +23,32 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 
-const db = firebase.firestore();
-
-db.collection("users").add({
-    first: "Ada",
-    last: "Lovelace",
-    born: 1815
-})
-.then(function(docRef) {
-    console.log("Document written with ID: ", docRef.id);
-})
-.catch(function(error) {
-    console.error("Error adding document: ", error);
-});
-
-
+const Stack = createStackNavigator();
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState()
+  const [accountActivated, setAccountActivated] = useState()
 
-  useEffect(() => firebase.auth().onAuthStateChanged((user) => user ? setLoggedIn(true) : setLoggedIn(false)), [])
+  function initialUserCheck(user) {
+      db.collection("users").doc(user.uid).get().then(function(doc) {
+      if (doc.data().movies.length !== 0) {
+        setAccountActivated(true)
+      } else {
+        setAccountActivated(false)
+      }
+      setLoggedIn(true)
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+  }
+  function loggedOut() {
+    setAccountActivated(false)
+    setLoggedIn(false)
+
+  }
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => user ? initialUserCheck(user) : loggedOut())
+  }, [])
   let [fontsLoaded] = useFonts({
     'ReemKufi-Regular': require('./assets/fonts/ReemKufi-Regular.ttf'),
     'Raleway-Regular': require('./assets/fonts/Raleway-Regular.ttf'),
@@ -72,19 +56,19 @@ export default function App() {
     'Raleway-Medium': require('./assets/fonts/Raleway-Medium.ttf'),
     'Raleway-Bold': require('./assets/fonts/Raleway-Bold.ttf')
   });
-  if (!fontsLoaded || loggedIn === undefined) {
+  if (!fontsLoaded || loggedIn === undefined || accountActivated === undefined) {
     return <AppLoading />;
   }
   else {
   return (
-    // <NavigationContainer>
-    //   <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={loggedIn ? "Navigation" : "LandingPage"}>
-    //     <Stack.Screen name="LandingPage" component={LandingPage} />
-    //     <Stack.Screen name="FavMovies" component={FavMovies} />
-    //     <Stack.Screen name="Navigation" component={Navigation} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
-    <TouchableOpacity onPress={() => addStuff()} style={{marginTop: 100}}><Text>Click</Text></TouchableOpacity>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={loggedIn && accountActivated ? "Navigation" : loggedIn && accountActivated === false ? "FavMovies" : "LandingPage"}>
+        <Stack.Screen name="LandingPage" component={LandingPage}/>
+        <Stack.Screen name="FavMovies" component={FavMovies} />
+        <Stack.Screen name="Navigation" component={Navigation} initialParams={{recentlyActivated: false}}/>
+        <Stack.Screen name="SearchFavs" component={SearchFavMovies}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 }

@@ -14,7 +14,7 @@ import SettingsScreen from './settingScreen'
 
 const Tab = createBottomTabNavigator();
 
-export default function Navigation() {
+export default function Navigation({route}) {
     return (
             <Tab.Navigator
                 screenOptions={({ route }) => ({
@@ -44,7 +44,7 @@ export default function Navigation() {
                     keyboardHidesTabBar: true
                 }}
             >
-                <Tab.Screen name="Activity" component={ActivityScreen} />
+                <Tab.Screen name="Activity" component={ActivityScreen} initialParams={route.params}/>
                 <Tab.Screen name="Generate" component={GenerateScreen} />
                 <Tab.Screen name="Recent" component={RecentlyWatched} />
                 <Tab.Screen name="Settings" component={SettingsScreen} />

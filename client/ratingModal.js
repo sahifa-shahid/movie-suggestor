@@ -1,13 +1,30 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Modal, Text, TouchableOpacity, TouchableHighlight, View, Alert, StyleSheet, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants'
 import { BlurView } from 'expo-blur';
 
+import {auth, db} from './firebaseHandler'
+import * as firebase from 'firebase'
+import 'firebase/firestore'
+
 import pulpfiction from './assets/pulpFiction.png'
 
-export default function RatingModal({ modalVisible, setModalVisible }) {
+function addMovie (title, rating) {
+    const user = auth.currentUser;
+
+    db.collection("users").doc("sahifa").update({
+        movies: firebase.firestore.FieldValue.arrayUnion({title: title, rating: rating})
+    }).catch(() => { 
+        db.collection("users").doc("sahifa").set({
+            movies: firebase.firestore.FieldValue.arrayUnion({title: title, rating: rating})
+    });
+})
+}
+
+export default function RatingModal({ modalVisible, setModalVisible, item}) {
     const [testing, setTesting] = useState(0)
+    useEffect(() => setTesting(0), [modalVisible])
     return (
         <View>
             <Modal
@@ -24,7 +41,7 @@ export default function RatingModal({ modalVisible, setModalVisible }) {
                         </TouchableOpacity>
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                             <Image source={pulpfiction} style={styles.moviePoster}></Image>
-                            <AdjustLabel fontSize={40} text={"PULP FICTION"} style={styles.movieTitle} numberOfLines={2} />
+                            <AdjustLabel fontSize={40} text={item.title} style={styles.movieTitle} numberOfLines={2} />
                             <Text style={styles.question}>How would you like to rate this movie?</Text>
                             <View style={{ flexDirection: 'row', marginBottom: 38, marginTop: 2, justifyContent: 'space-evenly', display: 'flex', width: '95%' }}>
                                 <TouchableOpacity onPress={() => setTesting(1)}>
@@ -45,7 +62,7 @@ export default function RatingModal({ modalVisible, setModalVisible }) {
                             </View>
                         </View>
                         <View style={{ alignSelf: 'flex-end', marginBottom: 20 }}>
-                            <TouchableOpacity style={styles.button} onPress={() => setModalVisible(false)}>
+                            <TouchableOpacity style={styles.button} onPress={() => {setModalVisible(false); addMovie(item.title, testing)}}>
                                 <Text style={styles.buttonTitle}>Save</Text>
                             </TouchableOpacity>
                         </View>

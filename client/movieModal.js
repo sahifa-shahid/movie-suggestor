@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Modal, Text, TouchableOpacity, TouchableHighlight, View, Alert, StyleSheet, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants'
@@ -6,9 +6,24 @@ import { BlurView } from 'expo-blur';
 
 import pulpfiction from './assets/pulpFiction.png'
 
-export default function MovieModal({ modalVisible, setModalVisible }) {
-    const paragraph = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of"
+export default function MovieModal({ modalVisible, setModalVisible, item }) {
+
     const [testing, setTesting] = useState(4)
+    const [movieInfo, setMovieInfo] = useState()
+
+    useEffect(() => {
+        async function getMoviesFromApi() {
+            try {
+                let response = await fetch(`https://api.themoviedb.org/3/movie/${item.id}?api_key=bd7527de69fe3480678236d07c155147`);
+                let responseJson = await response.json();
+                setMovieInfo(responseJson)
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        getMoviesFromApi()
+    }, [item])
+
     return (
         <View>
             <Modal
@@ -19,12 +34,13 @@ export default function MovieModal({ modalVisible, setModalVisible }) {
                     Alert.alert('Modal has been closed.');
                 }}>
                 <BlurView tint="dark" intensity={100} style={styles.notBlurred}>
+                    {movieInfo === undefined ? <Text>Loading...</Text> :
                     <View style={styles.modalContainer}>
                         <TouchableOpacity>
                             <MaterialIcons name='close' color='white' size={27} style={{ alignSelf: 'flex-end' }} onPress={() => { setModalVisible(!modalVisible); }} />
                         </TouchableOpacity>
-                        <Image source={pulpfiction} style={styles.moviePoster}></Image>
-                        <AdjustLabel fontSize={40} text={"PULP FICTION"} style={styles.movieTitle} numberOfLines={2} />
+                        <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}` }} style={styles.moviePoster}></Image>
+                        <AdjustLabel fontSize={40} text={item.title} style={styles.movieTitle} numberOfLines={2} />
                         <View style={{ flexDirection: 'row', marginBottom: 10, marginTop: 2 }}>
                             <View style={(testing >= 1) ? styles.activeRateButton : styles.rateButton}></View>
                             <View style={(testing >= 2) ? styles.activeRateButton : styles.rateButton}></View>
@@ -32,10 +48,17 @@ export default function MovieModal({ modalVisible, setModalVisible }) {
                             <View style={(testing >= 4) ? styles.activeRateButton : styles.rateButton}></View>
                             <View style={(testing >= 5) ? styles.activeRateButton : styles.rateButton}></View>
                         </View>
-                        <Text style={styles.genres}>Drama | Thriller | Crime</Text>
-                        <Text style={styles.info}>1998 • 1h59m • R-Rated</Text>
-                        <AdjustLabel fontSize={11} text={paragraph} style={styles.paragraph} numberOfLines={8} />
+                    <Text style={styles.genres}>{movieInfo.genres.map((genre, index) => {
+                        if(index === movieInfo.genres.length-1) {
+                            return `${genre.name}`
+                        } else {
+                            return `${genre.name} | `
+                        }
+                    })}</Text>
+                        <Text style={styles.info}>{item.release_date.slice(0,4)} • {parseInt(movieInfo.runtime/60)}h{movieInfo.runtime % 60}m</Text>
+                        <AdjustLabel fontSize={11} text={item.overview} style={styles.paragraph} numberOfLines={8} />
                     </View>
+                    }
                 </BlurView>
             </Modal>
         </View>
@@ -80,6 +103,7 @@ const styles = StyleSheet.create({
     movieTitle: {
         fontFamily: 'Raleway-Bold',
         color: 'white',
+        textTransform: 'uppercase'
     },
     rateButton: {
         backgroundColor: 'white',
@@ -110,7 +134,9 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     moviePoster: {
-        marginBottom: 13
+        marginBottom: 13,
+        width: 168,
+        height: 252
     },
     notBlurred: {
         ...StyleSheet.absoluteFill,

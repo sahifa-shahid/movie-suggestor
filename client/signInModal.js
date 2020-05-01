@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Dimensions, SafeAreaView } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { MaterialIcons } from '@expo/vector-icons';
-import * as firebase from 'firebase';
+import {auth} from './firebaseHandler'
 
 function firebaseSignIn(email, password, {navigation}, setModalVisibleSignIn) {
-    firebase.auth().signInWithEmailAndPassword(email, password).then(function() {
-        navigation.navigate('Navigation')
+    auth.signInWithEmailAndPassword(email, password).then(function() {
+        navigation.navigate('Navigation', {recentlyActivated: false})
         setModalVisibleSignIn(false)
     }).catch(function(error) {
       // Handle Errors here.

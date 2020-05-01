@@ -1,32 +1,28 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as firebase from "firebase"
-
+import {auth, db} from './firebaseHandler'
+import * as firebase from 'firebase'
+import 'firebase/firestore'
 
 
 import logo from './assets/logo.png'
 
 function firebaseSignOut({navigation}) {
-    firebase.auth().signOut().then(function() {
+    auth.signOut().then(function() {
+        navigation.navigate('Activity')
         navigation.navigate('LandingPage')
     }).catch(function(error) {
       // An error happened.
     });
   }
-// function addStuff () {
-//     db.collection("users").add({
-//         first: "Ada",
-//         last: "Lovelace",
-//         born: 1815
-//     })
-//     .then(function(docRef) {
-//         console.log("Document written with ID: ", docRef.id);
-//     })
-//     .catch(function(error) {
-//         console.error("Error adding document: ", error);
-//     });
-// }
+
+function addStuff () {
+    const user = auth.currentUser;
+    db.collection("users").doc(user.uid).update({
+        movies: firebase.firestore.FieldValue.arrayUnion({title: "Harry potter123", rating: 4})
+    });
+}
 
 export default function SettingsScreen({navigation}) {
     return (
@@ -39,9 +35,9 @@ export default function SettingsScreen({navigation}) {
                 <TouchableOpacity style={styles.redButton} onPress={() => firebaseSignOut({navigation})}>
                     <Text style={styles.buttonTitle}>Log out</Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity style={styles.redButton} onPress={() => addStuff()}>
+                <TouchableOpacity style={styles.redButton} onPress={() => addStuff()}>
                     <Text style={styles.buttonTitle}>Add Stuff</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
             </View>
         </LinearGradient>
     );

@@ -25,25 +25,28 @@ const DATA = [
         title: 'Third Item',
     }]
 
-function Item({ setModalVisible }) {
-    return (
-        <View style={styles.item}>
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <Image source={batman} />
-            </TouchableOpacity>
-        </View>
-    );
-}
 
 export default function MovieScrollView({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false)
+    const [currentItem, setCurrentItem] = useState(DATA[0])
+
+    function Item({ setModalVisible, item }) {
+        return (
+            <View style={styles.item}>
+                <TouchableOpacity onPress={() => {setCurrentItem(item); setModalVisible(true)}}>
+                    <Image source={batman} />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
-            <RatingModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
+            <RatingModal modalVisible={modalVisible} setModalVisible={setModalVisible} item={currentItem}/>
             <SafeAreaView style={styles.container}>
                 <FlatList
                     data={DATA}
-                    renderItem={({ item }) => <Item setModalVisible={setModalVisible} />}
+                    renderItem={({ item }) => <Item setModalVisible={setModalVisible} item={item} />}
                     keyExtractor={item => item.id}
                     ListHeaderComponent={SearchScreen({ navigation })}
                     ListHeaderComponentStyle={{ marginBottom: 8 }}

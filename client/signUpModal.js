@@ -2,15 +2,18 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Dimensions, SafeAreaView } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { MaterialIcons } from '@expo/vector-icons';
-
-import * as firebase from 'firebase';
+import { auth, db } from './firebaseHandler'
 
 function firebaseSignUp(email, password, {navigation}, setModalVisibleSignUp) {
-  firebase.auth().createUserWithEmailAndPassword(email, password).then(function(){
-    navigation.navigate('FavMovies')
-    setModalVisibleSignUp(false)
+  auth.createUserWithEmailAndPassword(email, password).then(function(){
+    db.collection("users").doc(auth.currentUser.uid).set({
+        movies: []}).then(() => {
+            navigation.navigate('FavMovies')
+            setModalVisibleSignUp(false)
+        })
   }).catch(function(error) {
     // Handle Errors here.
+    console.log(error)
     var errorCode = error.code;
     var errorMessage = error.message;
     // ...
