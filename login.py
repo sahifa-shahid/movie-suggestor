@@ -45,8 +45,56 @@ def login():
     else: 
         return jsonify({"message": "missing fields"}), 400
 
-#@app.route('/preferences', methods = ['GET', 'POST'])
-#def preferences():
+@app.route('/favourites/<username>', methods = ['POST', 'GET'])
+def favourites(username):
+    if request.method == 'POST':
+        favList = request.get_json()
+        collection.update_one({
+                "username": username
+            },
+            {
+                "$set": {
+                    "favourites": favList['favourites']
+                }
+            })
+        return jsonify({"message": "successfully updated"}), 201
+    elif request.method == 'GET':
+        user = request.get_json()
+        document = collection.find_one({"username": username})
+        return jsonify({"favourites": document['favourites']}), 201
+    else: 
+        return jsonify({"message": "wrong request type"}), 400
+
+@app.route('/movies/<username>', methods = ['POST', 'GET'])
+def list(username):
+    if request.method == 'POST':
+        info = request.get_json()
+        document = collection.find_one({"username": username})
+        movieList = document['movies']
+        if any(i['title'] == info['title'] for i in movieList) == False:
+            collection.update_one(
+            {
+                "username": username
+            },
+            {
+                "$addToSet":
+                {
+                    "movies":
+                    {
+                        "title": info['title'],
+                        "rating": int(info['rating']),
+                        "recommended": bool(info['recommended'])
+                    }
+                }
+            })
+            return jsonify({"message": "list successfully updated"}), 201
+        else:
+            return jsonify({"message": "movie is already in the list"}), 400
+    elif request.method == 'GET':
+        document = collection.find_one({"username": username})
+        return jsonify({"movies": document['movies']})
+    else:
+        return jsonify({"message": "wrong request type"}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
