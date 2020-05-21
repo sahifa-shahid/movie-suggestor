@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
-import { Modal, Text, TouchableOpacity, TouchableHighlight, View, Alert, StyleSheet, Image } from 'react-native';
+import { Modal, Text, TouchableOpacity, View, Alert, StyleSheet, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants'
 import { BlurView } from 'expo-blur';
@@ -8,21 +8,25 @@ import {auth, db} from './firebaseHandler'
 import * as firebase from 'firebase'
 import 'firebase/firestore'
 
-import pulpfiction from './assets/pulpFiction.png'
+// function addMovie (item) {
+//     const user = auth.currentUser;
 
-function addMovie (title) {
-    const user = auth.currentUser;
-    db.collection("users").doc(user.uid).update({
-        movies: firebase.firestore.FieldValue.arrayUnion({title: title, rating: 5})
-    }).catch((err) => { 
-        console.log(err)
-        db.collection("users").doc(user.uid).set({
-            movies: firebase.firestore.FieldValue.arrayUnion({title: title, rating: 5})
-    });
-})
+//     db.collection("users").doc(user.uid).update({
+//         movies: firebase.firestore.FieldValue.arrayUnion({...item, rating: 5})
+//     }).catch(() => { 
+//         db.collection("users").doc(user.uid).set({
+//             movies: firebase.firestore.FieldValue.arrayUnion({...item, rating: 5})
+//     });
+// })
+// }
+
+function edit(item, setFavMovies, favMovies, index) {
+    let copy = favMovies
+    copy[index] = item
+    setFavMovies({...copy})
 }
 
-export default function FavMoviesModal({ modalVisible, setModalVisible, item, navigation, data}) {
+export default function FavMoviesModal({ modalVisible, setModalVisible, item, navigation, setFavMovies, favMovies, index}) {
     return (
         <View>
             <Modal
@@ -38,11 +42,11 @@ export default function FavMoviesModal({ modalVisible, setModalVisible, item, na
                             <MaterialIcons name='close' color='white' size={27} style={{ alignSelf: 'flex-end' }} onPress={() => { setModalVisible(!modalVisible); }} />
                         </TouchableOpacity>
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                            <Image source={pulpfiction} style={styles.moviePoster}></Image>
+                            <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}` }} style={styles.moviePoster}></Image>
                             <AdjustLabel fontSize={40} text={item.title} style={styles.movieTitle} numberOfLines={2} />
                         </View>
                         <View style={{ alignItems: 'center', marginVertical: 20 }}>
-                            <TouchableOpacity style={styles.button} onPress={() => {setModalVisible(false); addMovie(item.title); navigation.navigate('FavMovies')}}>
+                            <TouchableOpacity style={styles.button} onPress={() => {setModalVisible(false); edit(item, setFavMovies, favMovies, index); navigation.navigate('FavMovies')}}>
                                 <Text style={styles.buttonTitle}>Save</Text>
                             </TouchableOpacity>
                         </View>
@@ -94,7 +98,9 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     moviePoster: {
-        marginBottom: 13
+        marginBottom: 13,
+        width: 168,
+        height: 252
     },
     notBlurred: {
         ...StyleSheet.absoluteFill,

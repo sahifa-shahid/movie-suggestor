@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -9,72 +9,15 @@ import SearchScreen from './searchScreen'
 import MovieModal from './movieModal'
 
 import logo from './assets/logo.png'
-import frozen from './assets/frozen.png'
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53aabb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa9f7f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571ei29d72',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571he29d72',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-14557a1e29d72',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72s',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72hi',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72add',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d7fff2',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e2',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e2fds9d72',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d7fdsf2',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d7fsd2',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72132',
-    title: 'Third Item',
-  },
-];
+import { db, auth } from './firebaseHandler'
 
-function Item({setModalVisible}) {
+
+function Item({ setModalVisible, item, setCurrentItem, index }) {
   return (
     <View style={styles.item}>
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <Image source={frozen} />
+      <TouchableOpacity onPress={() => {setCurrentItem(item); setModalVisible(true)}}>
+        <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}` }} style={{ width: 100, height: 150 }} />
       </TouchableOpacity>
     </View>
   );
@@ -102,17 +45,16 @@ function headerComponent({ navigation }) {
   )
 }
 
-function MovieScrollView({ navigation, setModalVisible }) {
+function MovieScrollView({ navigation, setModalVisible, data, setCurrentItem }) {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Item setModalVisible={setModalVisible} />}
-        keyExtractor={item => item.id}
+        data={data}
+        renderItem={({ item, index }) => <Item setModalVisible={setModalVisible} item={item} setCurrentItem={setCurrentItem} index={index} />}
         ListHeaderComponent={headerComponent({ navigation })}
         ListHeaderComponentStyle={{ marginTop: 25, marginBottom: 8 }}
         numColumns={3}
-        columnWrapperStyle={{ flex: 1, justifyContent: "space-evenly" }}
+        columnWrapperStyle={{ display: "flex", marginHorizontal: 10}}
       />
     </SafeAreaView>
   );
@@ -130,12 +72,28 @@ export default function RecentScreen() {
 
 function RecentlyWatched({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false)
+  const [data, setData] = useState()
+  const [loading, setLoading] = useState(true)
+  const [currentItem, setCurrentItem] = useState()
+  useEffect(() => {
+    function getDoc(user) {
+      db.collection("users").doc(user.uid)
+        .onSnapshot(function (doc) {
+          setData(doc.data().movies.reverse())
+          setCurrentItem(doc.data().movies[0])
+          setLoading(false)
+        })
+    }
+    getDoc(auth.currentUser)
+  }, [])
+
   return (
     <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
-      <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
-      <View style={styles.background}>
-        {MovieScrollView({ navigation, setModalVisible })}
-      </View>
+      {loading ? <Text>Loading...</Text> :
+        <View style={styles.background}>
+          <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible} item={currentItem} />
+          {MovieScrollView({ navigation, setModalVisible, data, setCurrentItem })}
+        </View>}
     </LinearGradient>
   )
 }
@@ -147,6 +105,8 @@ const styles = StyleSheet.create({
   },
   item: {
     marginVertical: 8,
+    flex: 0.333333,
+    alignItems: 'center'
   },
   background: {
     flex: 1

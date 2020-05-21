@@ -17,13 +17,6 @@ function firebaseSignOut({navigation}) {
     });
   }
 
-function addStuff () {
-    const user = auth.currentUser;
-    db.collection("users").doc(user.uid).update({
-        movies: firebase.firestore.FieldValue.arrayUnion({title: "Harry potter123", rating: 4})
-    });
-}
-
 export default function SettingsScreen({navigation}) {
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={{ flex: 1 }}>
@@ -34,9 +27,6 @@ export default function SettingsScreen({navigation}) {
             <View style={{ flex: 1, justifyContent: 'center' }}>
                 <TouchableOpacity style={styles.redButton} onPress={() => firebaseSignOut({navigation})}>
                     <Text style={styles.buttonTitle}>Log out</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.redButton} onPress={() => addStuff()}>
-                    <Text style={styles.buttonTitle}>Add Stuff</Text>
                 </TouchableOpacity>
             </View>
         </LinearGradient>

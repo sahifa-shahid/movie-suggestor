@@ -44,7 +44,6 @@ export default function App() {
   function loggedOut() {
     setAccountActivated(false)
     setLoggedIn(false)
-
   }
   useEffect(() => {
     auth.onAuthStateChanged((user) => user ? initialUserCheck(user) : loggedOut())
@@ -64,7 +63,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={loggedIn && accountActivated ? "Navigation" : loggedIn && accountActivated === false ? "FavMovies" : "LandingPage"}>
         <Stack.Screen name="LandingPage" component={LandingPage}/>
-        <Stack.Screen name="FavMovies" component={FavMovies} />
+        <Stack.Screen name="FavMovies" component={FavMovies}/>
         <Stack.Screen name="Navigation" component={Navigation} initialParams={{recentlyActivated: false}}/>
         <Stack.Screen name="SearchFavs" component={SearchFavMovies}/>
       </Stack.Navigator>

@@ -10,14 +10,14 @@ import 'firebase/firestore'
 
 import pulpfiction from './assets/pulpFiction.png'
 
-function addMovie (title, rating) {
+function addMovie (item, rating) {
     const user = auth.currentUser;
 
-    db.collection("users").doc("sahifa").update({
-        movies: firebase.firestore.FieldValue.arrayUnion({title: title, rating: rating})
+    db.collection("users").doc(user.uid).update({
+        movies: firebase.firestore.FieldValue.arrayUnion({...item, rating: rating})
     }).catch(() => { 
-        db.collection("users").doc("sahifa").set({
-            movies: firebase.firestore.FieldValue.arrayUnion({title: title, rating: rating})
+        db.collection("users").doc(user.uid).set({
+            movies: firebase.firestore.FieldValue.arrayUnion({...item, rating: rating})
     });
 })
 }
@@ -40,7 +40,7 @@ export default function RatingModal({ modalVisible, setModalVisible, item}) {
                             <MaterialIcons name='close' color='white' size={27} style={{ alignSelf: 'flex-end' }} onPress={() => { setModalVisible(!modalVisible); }} />
                         </TouchableOpacity>
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                            <Image source={pulpfiction} style={styles.moviePoster}></Image>
+                            <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}` }} style={styles.moviePoster}></Image>
                             <AdjustLabel fontSize={40} text={item.title} style={styles.movieTitle} numberOfLines={2} />
                             <Text style={styles.question}>How would you like to rate this movie?</Text>
                             <View style={{ flexDirection: 'row', marginBottom: 38, marginTop: 2, justifyContent: 'space-evenly', display: 'flex', width: '95%' }}>
@@ -62,7 +62,7 @@ export default function RatingModal({ modalVisible, setModalVisible, item}) {
                             </View>
                         </View>
                         <View style={{ alignSelf: 'flex-end', marginBottom: 20 }}>
-                            <TouchableOpacity style={styles.button} onPress={() => {setModalVisible(false); addMovie(item.title, testing)}}>
+                            <TouchableOpacity style={styles.button} onPress={() => {setModalVisible(false); addMovie(item, testing)}}>
                                 <Text style={styles.buttonTitle}>Save</Text>
                             </TouchableOpacity>
                         </View>
@@ -134,7 +134,9 @@ const styles = StyleSheet.create({
         marginBottom: 22
     },
     moviePoster: {
-        marginBottom: 13
+        marginBottom: 13,
+        width: 168,
+        height: 252
     },
     notBlurred: {
         ...StyleSheet.absoluteFill,

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Text, View, Dimensions, SafeAreaView, StyleSheet, ImageBackground, Image, TouchableOpacity, Platform } from 'react-native';
-import { WebView } from 'react-native-webview';
+import { WebView } from 'react-native-webview'
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -10,28 +10,55 @@ import AlertMeModal from './alertMeModal';
 import spiderman from './assets/spiderman.png'
 import trailer from './assets/trailer.png'
 import MovieModal from './movieModal'
+import loading from './assets/loadingsvg.svg'
 
-import {Video} from 'expo-av';
+import YouTube from 'react-native-youtube'
+
+import movieTrailer from 'movie-trailer'
 
 
 export default function ActivityScreen({ navigation, route }) {
     const [datafromapi, changeData] = useState()
     const [currentItem, setCurrentItem] = useState()
+    const [movieIds, setMovieIds] = useState({})
 
     useEffect(() => {
+        function formatDate(date) {
+            let d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+        
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+        
+            return [year, month, day].join('-');
+        }
         async function getMoviesFromApi() {
             try {
-                let response = await fetch('https://api.themoviedb.org/3/discover/movie?api_key=bd7527de69fe3480678236d07c155147&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&release_date.gte=2019-11-01&release_date.lte=2020-04-28');
+                let response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=bd7527de69fe3480678236d07c155147&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&release_date.gte=${formatDate(Date.now()-1.577e+10)}&release_date.lte=${formatDate(Date.now()-7.884e+6)}`);
                 let responseJson = await response.json();
-                let trendingList = responseJson.results.slice(0, 5)
+                let trendingList = await responseJson.results.slice(0, 5)
                 changeData(trendingList)
                 setCurrentItem(trendingList[0])
+                trendingList.forEach(async (movie) => {
+                    await movieTrailer(movie.title, { year: movie.release_date.slice(0, 4), id: true }).then(response => {
+                        setMovieIds(prevMovieIds => ({...prevMovieIds, [movie.title]: response}))
+                    }).catch(console.error)
+                })
+
+
             } catch (error) {
                 console.error(error);
             }
         }
-        getMoviesFromApi()
+        if(datafromapi === undefined) {
+            getMoviesFromApi()
+        }
     }, [])
+
 
     function renderItem({ item, index }) {
         const ITEM_HEIGHT = Math.round(Dimensions.get('window').height * 0.78);
@@ -52,18 +79,11 @@ export default function ActivityScreen({ navigation, route }) {
                             </TouchableOpacity>
                         </View>
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                            {/* <Image source={trailer} style={{ marginVertical: 30 }} /> */}
-                            <Video
-                                source={{ uri: 'https://skyfire.vimeocdn.com/1588369094-0xd676a8c4ab637a6a16f2b79bfebac02864bd87bc/240781008/sep/video/862730389,862730388,862730359,862730358/master.m3u8' }}
-                                rate={1.0}
-                                volume={1.0}
-                                isMuted={false}
-                                shouldPlay={true}
-                                isLooping={true}
-                                resizeMode="cover"
-                                style={{ width: 328, height: 200, marginVertical: 30 }}
-                            />
-
+                            <View style={{ height: 184.5, marginVertical: 30 }}>
+                                    {movieIds[item.title] !== undefined ? 
+                                    <WebView source={{ uri: `https://www.youtube.com/embed/${movieIds[item.title]}` }}
+                                    style={{ width: 328 }} /> : null }
+                            </View>
                             <AdjustLabel fontSize={40} text={item.title} style={styles.titleText} numberOfLines={3} />
                         </View>
                     </BlurView>
@@ -103,7 +123,7 @@ export default function ActivityScreen({ navigation, route }) {
     return (
         <LinearGradient colors={["rgba(0,0,0,0.98)", "#4e4e4e", "rgba(0,0,0,0.98)"]} style={styles.background}>
             {/* <AlertMeModal alertVisible={alertVisible} setAlertVisible={setAlertVisible} navigation={navigation} /> */}
-            {datafromapi === undefined || currentItem === undefined ? <Text>Loading</Text> :
+            {datafromapi === undefined || currentItem === undefined ? <Image source={loading} /> :
                 <SafeAreaView>
                     <MovieModal modalVisible={modalVisible} setModalVisible={setModalVisible} item={currentItem} />
                     {/* {console.log(datafromapi)} */}
@@ -114,7 +134,7 @@ export default function ActivityScreen({ navigation, route }) {
                             data={datafromapi}
                             sliderWidth={SLIDER_WIDTH}
                             itemWidth={ITEM_WIDTH}
-                            renderItem={({ item, index }) => renderItem({ item, index, setModalVisible })}
+                            renderItem={({ item, index }) => renderItem({ item, index })}
                             onSnapToItem={index => { setActiveIndex(index); setCurrentItem(datafromapi[index]) }} />
                     </View>
                     <Pagination

@@ -16,8 +16,10 @@
     "@use-expo/font": "^1.0.1",
     "base-64": "^0.1.0",
     "expo": "^36.0.2",
+    "expo-av": "~8.0.0",
     "expo-blur": "~8.0.0",
     "firebase": "^7.9.0",
+    "movie-trailer": "^2.0.6",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
@@ -32,8 +34,7 @@
     "react-native-web": "~0.11.7",
     "react-native-webview": "7.4.3",
     "react-native-youtube": "^2.0.1",
-    "react-navigation": "^4.3.7",
-    "expo-av": "~8.0.0"
+    "react-navigation": "^4.3.7"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.0.0",

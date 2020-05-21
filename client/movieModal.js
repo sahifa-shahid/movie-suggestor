@@ -8,7 +8,6 @@ import pulpfiction from './assets/pulpFiction.png'
 
 export default function MovieModal({ modalVisible, setModalVisible, item }) {
 
-    const [testing, setTesting] = useState(4)
     const [movieInfo, setMovieInfo] = useState()
 
     useEffect(() => {
@@ -41,13 +40,14 @@ export default function MovieModal({ modalVisible, setModalVisible, item }) {
                         </TouchableOpacity>
                         <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}` }} style={styles.moviePoster}></Image>
                         <AdjustLabel fontSize={40} text={item.title} style={styles.movieTitle} numberOfLines={2} />
+                        {item.hasOwnProperty('rating') ? 
                         <View style={{ flexDirection: 'row', marginBottom: 10, marginTop: 2 }}>
-                            <View style={(testing >= 1) ? styles.activeRateButton : styles.rateButton}></View>
-                            <View style={(testing >= 2) ? styles.activeRateButton : styles.rateButton}></View>
-                            <View style={(testing >= 3) ? styles.activeRateButton : styles.rateButton}></View>
-                            <View style={(testing >= 4) ? styles.activeRateButton : styles.rateButton}></View>
-                            <View style={(testing >= 5) ? styles.activeRateButton : styles.rateButton}></View>
-                        </View>
+                            <View style={(item.rating >= 1) ? styles.activeRateButton : styles.rateButton}></View>
+                            <View style={(item.rating >= 2) ? styles.activeRateButton : styles.rateButton}></View>
+                            <View style={(item.rating >= 3) ? styles.activeRateButton : styles.rateButton}></View>
+                            <View style={(item.rating >= 4) ? styles.activeRateButton : styles.rateButton}></View>
+                            <View style={(item.rating >= 5) ? styles.activeRateButton : styles.rateButton}></View>
+                        </View> : null}
                     <Text style={styles.genres}>{movieInfo.genres.map((genre, index) => {
                         if(index === movieInfo.genres.length-1) {
                             return `${genre.name}`
