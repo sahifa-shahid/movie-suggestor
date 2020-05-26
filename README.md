@@ -4,10 +4,10 @@
 <p>Developers: <a href="https://github.com/sahifa-shahid">Sahifa Shahid</a> and <a href="https://github.com/SarimDEV"> Muhammad Sarim</a></p>
 <p>ML algorithm can be found <a href="https://github.com/SarimDEV/scout-colabfiltering">here.</a></p>
 <div> 
-  <img src="Scout-Visuals/SCOUT-1.png" height="400">
-  <img src="Scout-Visuals/SCOUT-2.png" height="400">
-  <img src="Scout-Visuals/SCOUT-3.png" height="400">
-  <img src="Scout-Visuals/SCOUT-4.png" height="400">
+  <img src="Scout-Visuals/SCOUT-1.png" height="450">
+  <img src="Scout-Visuals/SCOUT-2.png" height="450">
+  <img src="Scout-Visuals/SCOUT-3.png" height="450">
+  <img src="Scout-Visuals/SCOUT-4.png" height="450">
 </div>
 <div> 
   <img src="Scout-Visuals/SCOUT-5.png" height="400">
