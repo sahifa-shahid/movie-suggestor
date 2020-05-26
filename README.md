@@ -1,8 +1,8 @@
 # movie-suggestor
 
-<p>Developers: Sahifa Shahid and <a href="https://github.com/SarimDEV"> Muhammad Sarim</a></p>
 <p>This is how our app looks like!</p>
-<p>ML algorithm can be found <a href="https://github.com/SarimDEV/scout-colabfiltering">here</a></p>
+<p>Developers: <a href="https://github.com/sahifa-shahid">Sahifa Shahid</a> and <a href="https://github.com/SarimDEV"> Muhammad Sarim</a></p>
+<p>ML algorithm can be found <a href="https://github.com/SarimDEV/scout-colabfiltering">here.</a></p>
 <div> 
   <img src="Scout-Visuals/SCOUT-1.png" height="400">
   <img src="Scout-Visuals/SCOUT-2.png" height="400">
