@@ -2,10 +2,16 @@
 
 <p>Developers: Sahifa Shahid and Muhammad Sarim</p>
 <p>This is how our app looks like!</p>
-
+<style>
+.myDiv {
+  flex-direction: row;
+}
+</style>
+<div class="myDiv"> 
 <img src="Scout-Visuals/SCOUT-1.png" height="400">
 <img src="Scout-Visuals/SCOUT-2.png" height="400">
 <img src="Scout-Visuals/SCOUT-3.png" height="400">
+</div>
 <img src="Scout-Visuals/SCOUT-4.png" height="400">
 <img src="Scout-Visuals/SCOUT-5.png" height="400">
 <img src="Scout-Visuals/SCOUT-6.png" height="400">
